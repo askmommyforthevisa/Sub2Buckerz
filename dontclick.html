@@ -1,17 +1,19 @@
 <html>
     <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" type="text/css" href="styles.css">
-    <script src="html2canvas.min.js"></script>
-    <script src="chance.min.js"></script>
-    <script src="jquery-2.1.4.js"></script>
-    <script src="jquery-ui-1.9.2.custom.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="https://chancejs.com/chance.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
     </head>
     <body>
+
       <div class="content">
-        <img src="leaside.jpeg" height="600">
+        <img src="http://pngimg.com/uploads/ironman/ironman_PNG62.png" height="600">
         <button id="start-btn">Snap!</button>
       </div>   
+
     <script> 
     
     var imageDataArray = [];
@@ -41,7 +43,7 @@
           $("body").append(c);
         }
         //clear all children except the canvas
-        $(".content").children().not(".dust").fadeOut(3500);
+        $(".content").children().not(".dust").fadeOut(4500);
         //apply animation
         $(".dust").each( function(index){
           animateBlur($(this),0.8,800);
@@ -111,35 +113,5 @@
       return canvas;
     }
     </script>
-        <style>
-    * {
-  box-sizing: border-box;
-}
-body {
-  margin: 0;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #ddd;
-}
-.content {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  background: #ddd;
-}
-#start-btn {
-  font-size: 36px;
-  padding: 20px 40px 20px 80px ;
-  margin-top: 30px;
-  border-radius: 10px;
-  background:url("thanos-logo.png") white 15px no-repeat;
-  background-size: 50px;
-}
-.dust {
-  position: absolute;
-}
-            </style>
     </body>
 </html>
