@@ -245,47 +245,44 @@ function pauseAudio() {
     <body>
         <span class="likebtn-wrapper" data-theme="likebtn" data-i18n_like="Like" data-ef_voting="heartbeat" data-identifier="item_1"></span>
         <audio id="myAudio">
-  
-  <source src="jam.mp3" type="audio/mpeg">
-  
-</audio>
+            <source src="jam.mp3" type="audio/mpeg">
+        </audio>
 
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <div>
-  <h1>Clozit</h1>
+            <h1>Clozit</h1>
             <img class="sticky" img src="leaside.jpeg" >
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <meta name="viewport" content="width=device-width, initial-scale=1">
             
-    
 
-  
-        <button onclick="signin()" button id = "mybutton">Sign in</button>
-        <button onclick="signout()" button id = "mybutton">Sign out</button>
-            <a href ="challeneges.html" button id = "mybutton">Challenges</a><a href ="aboutus.html" button id = "mybutton">AboutUs</a><a href ="Contactus.html" button id = "mybutton">ContactUs</a><button onclick="playAudio()" type="button" button id = "mybutton">Play Audio</button>
-            <button onclick="pauseAudio()" type="button" button id = "mybutton">Pause Audio</button>  <a href ="dontclick.html" button id = "mybutton">dont click fear thanos </a><a href ="aboutus.html" button id = "mybutton"></a>
-            <div class="slideshow-container">
+            <button onclick="signin()" button id = "mybutton">Sign in</button>
+            <button onclick="signout()" button id = "mybutton">Sign out</button>
+                <a href ="challeneges.html" button id = "mybutton">Challenges</a><a href ="aboutus.html" button id = "mybutton">AboutUs</a><a href ="Contactus.html" button id = "mybutton">ContactUs</a><button onclick="playAudio()"  id = "mybutton">Play Audio</button>
+                <button onclick="pauseAudio()" type="button" id = "mybutton">Pause Audio</button>  <a href ="dontclick.html" button id = "mybutton">dont click fear thanos </a><a href ="aboutus.html" id = "mybutton"></a>
+                
+                <div class="slideshow-container">
 
-<div class="mySlides fade">
-  <div class="numbertext">1 / 3</div>
-  <img src="soccer.jpeg" style="width:100%">
-  <div class="text">jACK</div>
-</div>
+                    <div class="mySlides fade">
+                      <div class="numbertext">1 / 3</div>
+                      <img src="soccer.jpeg" style="width:100%">
+                      <div class="text">jACK</div>
+                    </div>
 
-<div class="mySlides fade">
-  <div class="numbertext">2 / 3</div>
-  <img src="rugby.jpeg" style="width:100%">
-  <div class="text">MOM</div>
-</div>
+                    <div class="mySlides fade">
+                      <div class="numbertext">2 / 3</div>
+                      <img src="rugby.jpeg" style="width:100%">
+                      <div class="text">MOM</div>
+                    </div>
 
-<div class="mySlides fade">
-  <div class="numbertext">3 / 3</div>
-  <img src="leaside.jpeg" style="width:100%">
-  <div class="text">IS HOT</div>
-</div>
+                    <div class="mySlides fade">
+                      <div class="numbertext">3 / 3</div>
+                      <img src="leaside.jpeg" style="width:100%">
+                      <div class="text">IS HOT</div>
+                    </div>
 
-</div>
+                </div>
 <br>
 
 <div style="text-align:center">
@@ -293,12 +290,13 @@ function pauseAudio() {
   <span class="dot"></span> 
   <span class="dot"></span> 
 </div>
+            
             <p>RISE UP</p>
         <br>
         <p>Hey Fellow Gamers: mAtPAt</p>
         <a href="https://www.youtube.com/channel/UCK_V-Pc38REVm2YNCMwMpWA" target="_target">THIS IS OUR LEADER</a><br>
             <IMG STYLE="position:absolute; TOP:100px; Right:170px; WIDTH:250px; HEIGHT:250px" SRC="rugby.jpeg">
-            <button class="buttonload">
+                <button class="buttonload">load me</button>
   
 
     
@@ -306,7 +304,7 @@ function pauseAudio() {
             <p>Gamer Knowledge:<br>
             <textarea id="twit" type="text" button id = "mybutton" name="thetweet" cols="100" rows="4"></textarea>
         </form> 
-        <button type="button" button id = "mybutton" onclick="tweet()">Submit</button>
+        <button id="mybutton" onclick="tweet()">Submit</button>
     
         <br><input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" />
         <div id="imgTest" style="display:none;"></div>
@@ -315,9 +313,12 @@ function pauseAudio() {
     <div id="mydata"></div>
     <div id="myphoto"></div>
             <div id="mydiv"></div>
-    </div>   
+    <!--</div>-->   
     </body>
-<style>
+
+                
+                
+    <style>
     {box-sizing: border-box;}
 body {font-family: Verdana, sans-serif;}
 .mySlides {display: none;}
