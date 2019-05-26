@@ -12,19 +12,19 @@
     </style>
     <script>
         var slideIndex = 0;
-showSlides();
+        showSlides();
 
         function showSlides() {
-  var i;
-  var slides = document.getElementsByClassName("mySlides");
-  var dots = document.getElementsByClassName("dot");
-  for (i = 0; i < slides.length; i++) {
-    slides[i].style.display = "none";  
+            var i;
+            var slides = document.getElementsByClassName("mySlides");
+            var dots = document.getElementsByClassName("dot");
+            for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";  
   }
-  slideIndex++;
-  if (slideIndex > slides.length) {slideIndex = 1}    
-  for (i = 0; i < dots.length; i++) {
-    dots[i].className = dots[i].className.replace(" active", "");
+        slideIndex++;
+            if (slideIndex > slides.length) {slideIndex = 1}    
+            for (i = 0; i < dots.length; i++) {
+            dots[i].className = dots[i].className.replace(" active", "");
   }
   slides[slideIndex-1].style.display = "block";  
   dots[slideIndex-1].className += " active";
@@ -113,24 +113,34 @@ showSlides();
         function updatetweets(data) {
             //var mylist = "<ul>";
             var mytab = "<table>";
-            users = data[1]; // put on top, because changed data - not good coding change later
+            users = data[1]; 
             data = data[0];
+            
+            console.log(users);
+            console.log(data);
             
             for (var u in data) {
                 for (var t in data[u]) {
                     mytab = mytab + "<tr>";
                     var date = new Date(data[u][t].time);
                     var time = date.toString();
+                    var likes = data[u][t].likes;
+                    var dislikes = data[u][t].likes;
                     if (data[u][t].img != "") {
                         mytab = mytab + "<td><img src='" + users[u].profile_picture + "' width='50px'></td>";
                         mytab = mytab + "<td>" + users[u].email + "</td>";
                         mytab = mytab + "<td>" + data[u][t].tweet + "</td>";
                         mytab = mytab + "<td>" + time + "<br><img src='" + data[u][t].img + "' width='300px'></td>";
+                        mytab = mytab + "<td> <button id='like' onclick = 'like(" + data[u][t].time + ")'> Like </button> </td>";
+                        mytab = mytab + "<td> <button id = 'dislike' onclick = 'dislike(" + data[u][t].time + ")'> Disike </button> </td>";
                     } else {
                         mytab = mytab + "<td><img src='" + users[u].profile_picture + "' width='50px'></td>";
                         mytab = mytab + "<td>" + users[u].email + "</td>";
                         mytab = mytab + "<td>" + data[u][t].tweet + "</td>";
+                        mytab = mytab + "<td> | Likes: " + data[u][t].likes + " | Dislikes: " + data[u][t].dislikes + " | </td>";
                         mytab = mytab + "<td>" + time + "</td>";
+                        mytab = mytab + "<td> <button onclick = 'like(" + data[u][t].time + ")'> Like </button> </td>";
+                        mytab = mytab + "<td> <button onclick = 'dislike(" + data[u][t].time + ")'> Disike </button> </td>";
                         
                         
                     } 
@@ -144,15 +154,54 @@ showSlides();
             mytdiv.innerHTML = mytab;
         }
         
-        // write tweets to firebase
-        function tweet() {
+        function like(data2) {
+            //var mylist = "<ul>";
+                        
+            firebase.database().ref('/tweets').once('value').then(function(snapshot) {
+                    var data = (snapshot.val());
+                    if (data == null) {
+                      console.log("No data found at /tweets/" + userId);  
+                    } else { 
+                        firebase.database().ref('/users').once('value').then(function(snapshot) { 
+                        var userdata = (snapshot.val());
+                        if (userdata != null) {
+                           dataarray = [data,userdata]
+                        }
+                      });
+                    }
+                users = dataarray[1]; 
+            data = dataarray[0];
+            
+                var uCount = 0;
+                var tCount = 0;
+                
+            for (var u in data) {
+                console.log(u);
+                for (var t in data[u]) {
+                    console.log(t);
+                    if (data[u][t].time == data2) {
+                        newLikes = Number(data[u][t].likes) + 1;
+                        firebase.database().ref('tweets/' + u + "/" + t).update({
+                        likes: newLikes
+                        });
+                        alert(newLikes);
+                    }
+                    tCount++;
+                }
+            uCount++;
+            }
+            });
+            
+        }
+ 
+                 function tweet() {
             
             var twitdoc = document.getElementById("twit");
             var twitimg = document.getElementById("imgTest");
             var nameValue = twitdoc.value;
             var imgValue = twitimg.innerHTML;
             var js_time = Date.now();
-            var tweetid = firebase.database().ref('tweets/' + userId + "/").push({tweet: nameValue, time: js_time, img: imgValue});
+            var tweetid = firebase.database().ref('tweets/' + userId + "/").push({tweet: nameValue, time: js_time, img: imgValue, likes: 0, dislikes: 0});
             twitdoc.value = "";
             console.log("tweet written")
             
@@ -171,10 +220,7 @@ showSlides();
                       });
                     }
                 });
-            
-            
-            
-            // The unique key stored in tweetid is based on a timestamp, so list items will automatically be ordered chronologically. Because Firebase generates a unique key for each tweet, no write conflicts will occur if multiple users add a post at the same time. https://firebase.google.com/docs/database/admin/save-data
+     
             
         }
         
@@ -227,7 +273,7 @@ function pauseAudio() {
             var tweetid = firebase.database().ref('tweets/' + userId + "/").push({tweet: "push adds to the nodes, a unique key/timestamp is also added", time: js_time});
         }
 
-    (function(d,e,s){if(d.getElementById("likebtn_wjs"))return;a=d.createElement(e);m=d.getElementsByTagName(e)[0];a.async=1;a.id="likebtn_wjs";a.src=s;m.parentNode.insertBefore(a, m)})(document,"script","//w.likebtn.com/js/w/widget.js");
+    (function(d,e,s){if(d.getElementById("likebtn_wjs"))return;a=d.createElement(e);m=d.getElementsByTagName(e)[0];a.async=1;a.id="likebtn_wjs";a.src=s;m.parentNode.insertBefore(a, m)})(document,"script","//https://drakebp46.github.io/website/");
         
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -235,7 +281,7 @@ function pauseAudio() {
 <nav id="nav1">
 <div class="dropdown">
   <button class="dropbtn">Dropdown</button>
-  <div class="dropdown-content">
+    <div class="dropdown-content">
     <a href="https://mail.google.com/mail/u/0/">gmail</a>
     <a href="https://ucc.learning.powerschool.com/do/account/login?src=%2Fu%2Fdrake.belanger-polak%2Fportal">powerschool</a>
     <a href="https://www.google.com/drive/">google drive</a>
@@ -309,33 +355,33 @@ function pauseAudio() {
         <br><input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" />
         <div id="imgTest" style="display:none;"></div>
         
-    <div id="mytweets"></div>
-    <div id="mydata"></div>
-    <div id="myphoto"></div>
-            <div id="mydiv"></div>
+        <div id="mytweets"></div>
+        <div id="mydata"></div>
+        <div id="myphoto"></div>
+        <div id="mydiv"></div>
     <!--</div>-->   
-    </body>
+    
 
                 
                 
     <style>
-    {box-sizing: border-box;}
-body {font-family: Verdana, sans-serif;}
-.mySlides {display: none;}
+        {box-sizing: border-box;}
+        body {font-family: Verdana, sans-serif;}
+        .mySlides {display: none;}
 img {vertical-align: middle;}
     .slideshow-container {
-  max-width: 400px;
-  position: position:absolute; TOP:100px; Right:170px;
-  margin: auto;
+    max-width: 400px;
+    position: position:absolute; TOP:100px; Right:170px;
+    margin: auto;
     }
     .text {
-  color: #f2f2f2;
-  font-size: 15px;
-  padding: 8px 12px;
-  position: absolute;
-  bottom: 8px;
-  width: 100%;
-  text-align: center;
+    color: #f2f2f2;
+    font-size: 15px;
+    padding: 8px 12px;
+    position: absolute;
+    bottom: 8px;
+    width: 100%;
+    text-align: center;
     }
     .numbertext {
   color: #f2f2f2;
@@ -345,22 +391,22 @@ img {vertical-align: middle;}
   top: 0;
 }
     .dot {
-  height: 15px;
-  width: 15px;
-  margin: 0 2px;
-  background-color: #bbb;
-  border-radius: 50%;
-  display: inline-block;
-  transition: background-color 0.6s ease;
+        height: 15px;
+        width: 15px;
+        margin: 0 2px;
+        background-color: #bbb;
+        border-radius: 50%;
+        display: inline-block;
+        transition: background-color 0.6s ease;
 }
     .active {
   background-color: #717171;
 }
     .fade {
-  -webkit-animation-name: fade;
-  -webkit-animation-duration: 1.5s;
-  animation-name: fade;
-  animation-duration: 1.5s;
+    -webkit-animation-name: fade;
+    -webkit-animation-duration: 1.5s;
+    animation-name: fade;
+    animation-duration: 1.5s;
 }
 
 @-webkit-keyframes fade {
