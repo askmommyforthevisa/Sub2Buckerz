@@ -227,7 +227,7 @@ function pauseAudio() {
             var tweetid = firebase.database().ref('tweets/' + userId + "/").push({tweet: "push adds to the nodes, a unique key/timestamp is also added", time: js_time});
         }
 
-    (function(d,e,s){if(d.getElementById("likebtn_wjs"))return;a=d.createElement(e);m=d.getElementsByTagName(e)[0];a.async=1;a.id="likebtn_wjs";a.src=s;m.parentNode.insertBefore(a, m)})(document,"script","//w.likebtn.com/js/w/widget.js");
+(function(d,e,s){if(d.getElementById("likebtn_wjs"))return;a=d.createElement(e);m=d.getElementsByTagName(e)[0];a.async=1;a.id="likebtn_wjs";a.src=s;m.parentNode.insertBefore(a, m)})(document,"script","//w.likebtn.com/js/w/widget.js");
         
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -243,7 +243,10 @@ function pauseAudio() {
     </div>
     </nav>
     <body>
-        <span class="likebtn-wrapper" data-theme="likebtn" data-i18n_like="Like" data-ef_voting="heartbeat" data-identifier="item_1"></span>
+        <<!-- LikeBtn.com BEGIN -->
+<span class="likebtn-wrapper" data-theme="custom" data-icon_d="arr19-d" data-icon_d_c_v="#fb0505" data-white_label="true" data-identifier="item_1" data-voting_frequency="5" data-loader_show="true"></span>
+
+<!-- LikeBtn.com END -->
         <audio id="myAudio">
             <source src="jam.mp3" type="audio/mpeg">
         </audio>
