@@ -3,12 +3,16 @@
     <script src="https://www.gstatic.com/firebasejs/5.9.3/firebase.js"></script>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
 
+    <style>
+        tr:hover {background-color: #f5f5f5;}
+        th, td {
+            border-bottom: 1px solid #ddd;
+        }
     
-        
+    </style>
     <script>
         var slideIndex = 0;
 showSlides();
-
         function showSlides() {
   var i;
   var slides = document.getElementsByClassName("mySlides");
@@ -55,7 +59,6 @@ showSlides();
                 mydiv.innerHTML = name
                 myphotodiv = document.getElementById("myphoto");
                 myphotodiv.innerHTML = "<img src='" + imageUrl + "'/>";
-
                 firebase.database().ref('/tweets').once('value').then(function(snapshot) {
                     var data = (snapshot.val());
                     if (data == null) {
@@ -78,7 +81,6 @@ showSlides();
         }); // end check auth state
         
         function encodeImageFileAsURL() {
-
             var filesSelected = document.getElementById("inputFileToLoad").files;
             if (filesSelected.length > 0) {
                 var fileToLoad = filesSelected[0];
@@ -187,11 +189,9 @@ showSlides();
             });
         }
         var x = document.getElementById("myAudio"); 
-
 function playAudio() { 
   x.play(); 
 } 
-
 function pauseAudio() { 
   x.pause(); 
 } 
@@ -221,7 +221,6 @@ function pauseAudio() {
             var js_time = Date.now();
             var tweetid = firebase.database().ref('tweets/' + userId + "/").push({tweet: "push adds to the nodes, a unique key/timestamp is also added", time: js_time});
         }
-
     (function(d,e,s){if(d.getElementById("likebtn_wjs"))return;a=d.createElement(e);m=d.getElementsByTagName(e)[0];a.async=1;a.id="likebtn_wjs";a.src=s;m.parentNode.insertBefore(a, m)})(document,"script","//w.likebtn.com/js/w/widget.js");
         
     </script>
@@ -257,7 +256,25 @@ function pauseAudio() {
                 <a href ="challeneges.html" button id = "mybutton">Challenges</a><a href ="aboutus.html" button id = "mybutton">AboutUs</a><a href ="Contactus.html" button id = "mybutton">ContactUs</a><button onclick="playAudio()"  id = "mybutton">Play Audio</button>
                 <button onclick="pauseAudio()" type="button" id = "mybutton">Pause Audio</button>  <a href ="dontclick.html" button id = "mybutton">dont click fear thanos </a><a href ="aboutus.html" id = "mybutton"></a>
                 
-                
+                <div class="slideshow-container">
+
+                    <div class="mySlides fade">
+                      <div class="numbertext">1 / 3</div>
+                      <img src="soccer.jpeg" style="width:100%">
+                      <div class="text">jACK</div>
+                    </div>
+
+                    <div class="mySlides fade">
+                      <div class="numbertext">2 / 3</div>
+                      <img src="rugby.jpeg" style="width:100%">
+                      <div class="text">MOM</div>
+                    </div>
+
+                    <div class="mySlides fade">
+                      <div class="numbertext">3 / 3</div>
+                      <img src="leaside.jpeg" style="width:100%">
+                      <div class="text">IS HOT</div>
+                    </div>
 
                 </div>
 <br>
@@ -270,7 +287,7 @@ function pauseAudio() {
             
             <p>RISE UP</p>
         <br>
-        <p>Hey Fellow Gamers: matPAt</p>
+        <p>Hey Fellow Gamers: mAtPAt</p>
         <a href="https://www.youtube.com/channel/UCK_V-Pc38REVm2YNCMwMpWA" target="_target">THIS IS OUR LEADER</a><br>
             <IMG STYLE="position:absolute; TOP:100px; Right:170px; WIDTH:250px; HEIGHT:250px" SRC="rugby.jpeg">
                 <button class="buttonload">load me</button>
@@ -339,17 +356,14 @@ img {vertical-align: middle;}
   animation-name: fade;
   animation-duration: 1.5s;
 }
-
 @-webkit-keyframes fade {
   from {opacity: .4} 
   to {opacity: 1}
 }
-
 @keyframes fade {
   from {opacity: .4} 
   to {opacity: 1}
 }
-
 /* On smaller screens, decrease text size */
 @media only screen and (max-width: 300px) {
   .text {font-size: 11px}
@@ -367,7 +381,6 @@ img {vertical-align: middle;}
   padding: 12px 24px; /* Some padding */
   font-size: 16px; /* Set a font-size */
 }
-
 /* Add a right margin to each icon */
 .fa {
   margin-left: -12px;
@@ -388,13 +401,11 @@ img {vertical-align: middle;}
   animation-name: example;
   animation-duration: 4s;
 }
-
 /* Safari 4.0 - 8.0 */
 @-webkit-keyframes example {
   from {background-color: red;}
   to {background-color: yellow;}
 }
-
 /* Standard syntax */
 @keyframes example {
   from {background-color: red;}
@@ -404,13 +415,11 @@ img {vertical-align: middle;}
    font-family: myFirstFont;
    src: url(sansation_light.woff);
 }
-
 @font-face {
    font-family: myFirstFont;
    src: url(sansation_bold.woff);
    font-weight: bold;
 }
-
 * {
    font-family: myFirstFont;
 }
@@ -425,7 +434,6 @@ img {vertical-align: middle;}
   position: x;
   display: inline-block;
 }
-
 /* Dropdown Content (Hidden by Default) */
 .dropdown-content {
   display: none;
@@ -435,7 +443,6 @@ img {vertical-align: middle;}
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
 }
-
 /* Links inside the dropdown */
 .dropdown-content a {
   color: black;
@@ -443,10 +450,8 @@ img {vertical-align: middle;}
   text-decoration: none;
   display: block;
 }
-
 /* Change color of dropdown links on hover */
 .dropdown-content a:hover {background-color: #f1f1f1}
-
 /* Show the dropdown menu on hover */
 .dropdown:hover .dropdown-content {
     display: block;}
@@ -466,7 +471,6 @@ img {vertical-align: middle;}
 }
           
          
-
 /* Change the background color of the dropdown button when the dropdown content is shown */
 .dropdown:hover .dropbtn {
   background-color: #3e8e41;
@@ -476,19 +480,16 @@ div {
   border: 1px solid gray;
   padding: 8px;
 }
-
 h1 {
   text-align: center;
   text-transform: uppercase;
   color: #4CAF50;
 }
-
 p {
   text-indent: 50px;
   text-align: justify;
   letter-spacing: 3px;
 }
-
 a {
   text-decoration: none;
   color: #008CBA;
@@ -497,10 +498,8 @@ a {
  background-color: ghostwhite;
   
   
-
   background-attachment: fixed;
 }
-
     #mybutton:hover {
             background-color: aqua;
             font-family: cursive;
@@ -515,13 +514,5 @@ a {
             color : blueviolet;
           }
 }
-        tr:hover {background-color: #f5f5f5;}
-        th, td {
-            border-bottom: 1px solid #ddd;
-        }
-    
     </style>
-    
-
-    
-</html>
+            </html>
