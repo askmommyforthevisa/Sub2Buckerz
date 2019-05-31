@@ -3,15 +3,10 @@
     <script src="https://www.gstatic.com/firebasejs/5.9.3/firebase.js"></script>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
 
-    <style>
-        tr:hover {background-color: #f5f5f5;}
-        th, td {
-            border-bottom: 1px solid #ddd;
-        }
     
-    </style>
     <script>
         
+
         // Initialize Firebase
         var config = {
             apiKey: "AIzaSyALodD_o3cNbWhyujAXmbHS6zW8eMx5pfI",
@@ -33,6 +28,30 @@
                 name = user.displayName;
                 imageUrl = user.photoURL;
                 email = user.email;
+                
+                firebase.database().ref('/users').once('value').then(function(snapshot) {
+                    var data = (snapshot.val());
+                    
+                    dataarray = [data]
+                    users = dataarray[0];
+                    
+                    for(var u in users) {
+                    if(users[u].email == email) {
+                    console.log(users[u].bio);
+                    
+                    if (users[u].bio != null) {
+                        firebase.database().ref("/users/bio").once('value', function(snapshot) {
+                            var firebasebio = snapshot.val();
+                            document.getElementById("bioarea").innerHTML = firebasebio
+                        });
+                        } else {
+
+                        document.getElementById("bioarea").innerHTML = "";
+                    }
+                }
+                
+            }
+        });
                     
                 // write user data to users
                 writeUserData(userId, name, email, imageUrl);
@@ -63,6 +82,93 @@
             } // end user null check
         }); // end check auth state
         
+        
+        function updatetweets(data) {
+            //var mylist = "<ul>";
+            var mytab = "<table>";
+            users = data[1]; 
+            data = data[0];
+            
+            console.log(users);
+            console.log(data);
+            
+            
+            for (var u in data) {
+                for (var t in data[u]) {
+                    mytab = mytab + "<tr>";
+                    var date = new Date(data[u][t].time);
+                    var time = date.toString();
+                    var likes = data[u][t].likes;
+                    var dislikes = data[u][t].likes;
+                    if (data[u][t].img != "") {
+                        mytab = mytab + "<td><img src='" + users[u].profile_picture + "' width='50px'></td>";
+                        mytab = mytab + "<td>" + users[u].email + "</td>";
+                        mytab = mytab + "<td>" + data[u][t].tweet + "</td>";
+                        mytab = mytab + "<td>" + time + "</td>";
+                        mytab  = mytab + "<td><img src='" + data[u][t].img + "' width='300px'></td>";
+                        mytab = mytab + "<td> <button id='mybutton' onclick = 'like(" + data[u][t].time + ")'> Like </button> </td>";
+                        mytab = mytab + "<td> <button id = 'mybutton' onclick = 'dislike(" + data[u][t].time + ")'> Dislike </button> </td>";
+                    } else {
+                        mytab = mytab + "<td><img src='" + users[u].profile_picture + "' width='50px'></td>";
+                        mytab = mytab + "<td>" + users[u].email + "</td>";
+                        mytab = mytab + "<td>" + data[u][t].tweet + "</td>";
+                        mytab = mytab + "<td> | Likes: " + data[u][t].likes + " | Dislikes: " + data[u][t].dislikes + " | </td>";
+                        mytab = mytab + "<td>" + time + "</td>";
+                        mytab = mytab + "<td> <button id = 'mybutton' button onclick = 'like(" + data[u][t].time + ")'> Like </button> </td>";
+                        mytab = mytab + "<td> <button id = 'mybutton' button onclick = 'dislike(" + data[u][t].time + ")'> Dislike </button> </td>";
+                        
+                        
+                    } 
+                    mytab = mytab + "</tr>";
+                }   
+            }
+            //mylist = mylist + "</ul>";
+            mytab = mytab + "</table>"
+            var mytdiv = document.getElementById("mytweets");
+            //mytdiv.innerHTML = mylist;
+            mytdiv.innerHTML = mytab;
+        }
+        
+        function like(data2) {
+            //var mylist = "<ul>";
+                        
+            firebase.database().ref('/tweets').once('value').then(function(snapshot) {
+                    var data = (snapshot.val());
+                    if (data == null) {
+                      console.log("No data found at /tweets/" + userId);  
+                    } else { 
+                        firebase.database().ref('/users').once('value').then(function(snapshot) { 
+                        var userdata = (snapshot.val());
+                        if (userdata != null) {
+                           dataarray = [data,userdata]
+                        }
+                      });
+                    }
+                users = dataarray[1]; 
+            data = dataarray[0];
+            
+                var uCount = 0;
+                var tCount = 0;
+                
+            for (var u in data) {
+                console.log(u);
+                for (var t in data[u]) {
+                    console.log(t);
+                    if (data[u][t].time == data2) {
+                        newLikes = Number(data[u][t].likes) + 1;
+                        firebase.database().ref('tweets/' + u + "/" + t).update({
+                        likes: newLikes
+                        });
+                        alert(newLikes);
+                    }
+                    tCount++;
+                }
+            uCount++;
+            }
+            });
+            
+        }
+        
         function encodeImageFileAsURL() {
             var filesSelected = document.getElementById("inputFileToLoad").files;
             if (filesSelected.length > 0) {
@@ -88,51 +194,21 @@
                 email: email,
                 profile_picture : imageUrl
             });
+            firebase.database().ref("/users/" + userId + "bio").once('value', function(snapshot) {
+                var bio
+            }
         }
         
-        function updatetweets(data) {
-            //var mylist = "<ul>";
-            var mytab = "<table>";
-            users = data[1]; // put on top, because changed data - not good coding change later
-            data = data[0];
-            
-            for (var u in data) {
-                for (var t in data[u]) {
-                    mytab = mytab + "<tr>";
-                    var date = new Date(data[u][t].time);
-                    var time = date.toString();
-                    if (data[u][t].img != "") {
-                        mytab = mytab + "<td><img src='" + users[u].profile_picture + "' width='50px'></td>";
-                        mytab = mytab + "<td>" + users[u].email + "</td>";
-                        mytab = mytab + "<td>" + data[u][t].tweet + "</td>";
-                        mytab = mytab + "<td>" + time + "<br><img src='" + data[u][t].img + "' width='300px'></td>";
-                    } else {
-                        mytab = mytab + "<td><img src='" + users[u].profile_picture + "' width='50px'></td>";
-                        mytab = mytab + "<td>" + users[u].email + "</td>";
-                        mytab = mytab + "<td>" + data[u][t].tweet + "</td>";
-                        mytab = mytab + "<td>" + time + "</td>";
-                        
-                        
-                    } 
-                    mytab = mytab + "</tr>";
-                }   
-            }
-            //mylist = mylist + "</ul>";
-            mytab = mytab + "</table>"
-            var mytdiv = document.getElementById("mytweets");
-            //mytdiv.innerHTML = mylist;
-            mytdiv.innerHTML = mytab;
-        }
+       
         
         // write tweets to firebase
         function tweet() {
-            
             var twitdoc = document.getElementById("twit");
             var twitimg = document.getElementById("imgTest");
             var nameValue = twitdoc.value;
             var imgValue = twitimg.innerHTML;
             var js_time = Date.now();
-            var tweetid = firebase.database().ref('tweets/' + userId + "/").push({tweet: nameValue, time: js_time, img: imgValue});
+            var tweetid = firebase.database().ref('tweets/' + userId + "/").push({tweet: nameValue, time: js_time, img: imgValue, likes: 0, dislikes: 0});
             twitdoc.value = "";
             console.log("tweet written")
             
@@ -172,12 +248,7 @@
             });
         }
         var x = document.getElementById("myAudio"); 
-function playAudio() { 
-  x.play(); 
-} 
-function pauseAudio() { 
-  x.pause(); 
-} 
+ 
         function getData() {
            var userId = document.getElementById("uid").innerHTML;
            firebase.database().ref('/tweets/' + userId).once('value', function(snapshot) {
@@ -206,68 +277,102 @@ function pauseAudio() {
         }
     (function(d,e,s){if(d.getElementById("likebtn_wjs"))return;a=d.createElement(e);m=d.getElementsByTagName(e)[0];a.async=1;a.id="likebtn_wjs";a.src=s;m.parentNode.insertBefore(a, m)})(document,"script","//w.likebtn.com/js/w/widget.js");
         
+        (function(t,e,s,o){var n,c,l;t.SMCX=t.SMCX||[],e.getElementById(o)||(n=e.getElementsByTagName(s),c=n[n.length-1],l=e.createElement(s),l.type="text/javascript",l.async=!0,l.id=o,l.src=["https:"===location.protocol?"https://":"http://","widget.surveymonkey.com/collect/website/js/tRaiETqnLgj758hTBazgd2xk3h4vCrAabitScY9ATSj8lLwlwgKiRXbHjlf3U4Oa.js"].join(""),c.parentNode.insertBefore(l,c))})(window,document,"script","smcx-sdk");
+
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <nav id="nav1">
 <div class="dropdown">
   <button class="dropbtn">Dropdown</button>
-  <div class="dropdown-content">
-    <a href="https://mail.google.com/mail/u/0/">gmail</a>
-    <a href="https://ucc.learning.powerschool.com/do/account/login?src=%2Fu%2Fdrake.belanger-polak%2Fportal">powerschool</a>
+    <div class="dropdown-content">
+    <a href="https://krunker.io/?game=MIA:1ryke">KRUNKER</a>
+    <a href="https://diep.io/">DIEP</a>
     <a href="https://www.google.com/drive/">google drive</a>
   </div>
     </div>
     </nav>
     <body>
-        <span class="likebtn-wrapper" data-theme="likebtn" data-i18n_like="Like" data-ef_voting="heartbeat" data-identifier="item_1"></span>
-        <audio id="myAudio">
-  
+        <audio controls>
   <source src="jam.mp3" type="audio/mpeg">
-  
-</audio>
+            </audio>
+       <body style="background-color:whitesmoke;">
+        <span class="likebtn-wrapper" data-theme="likebtn" data-i18n_like="Like" data-ef_voting="heartbeat" data-identifier="item_1"></span>
+        
 
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <div>
-  <h1>Clozit</h1>
+            <h1>Clozit</h1>
             <img class="sticky" img src="leaside.jpeg" >
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <meta name="viewport" content="width=device-width, initial-scale=1">
             
-        
 
-  
-        <button onclick="signin()" button id = "mybutton">Sign in</button>
-        <button onclick="signout()" button id = "mybutton">Sign out</button>
-            <a href ="challeneges.html" button id = "mybutton">Challenges</a><a href ="aboutus.html" button id = "mybutton">AboutUs</a><a href ="Contactus.html" button id = "mybutton">ContactUs</a><button onclick="playAudio()" type="button" button id = "mybutton">Play Audio</button>
-<button onclick="pauseAudio()" type="button" button id = "mybutton">Pause Audio</button>  <a href ="dontclick.html" button id = "mybutton">dont click fear thanos </a><a href ="aboutus.html" button id = "mybutton">
+            <button onclick="signin()" button id = "mybutton">Sign in</button>
+            <button onclick="signout()" button id = "mybutton">Sign out</button>
+                <a href ="challeneges.html" button id = "mybutton">Challenges</a><a href ="aboutus.html" button id = "mybutton">AboutUs</a><a href ="Contactus.html" button id = "mybutton">ContactUs</a><a href ="dontclick.html" button id = "mybutton">dont click fear thanos </a><a href ="aboutus.html" id = "mybutton"></a>
+                
+               
+            
+<br>
+
+<div style="text-align:center">
+  <span class="dot"></span> 
+  <span class="dot"></span> 
+  <span class="dot"></span> 
+</div>
+            
             <p>RISE UP</p>
         <br>
         <p>Hey Fellow Gamers: mAtPAt</p>
         <a href="https://www.youtube.com/channel/UCK_V-Pc38REVm2YNCMwMpWA" target="_target">THIS IS OUR LEADER</a><br>
             <IMG STYLE="position:absolute; TOP:100px; Right:170px; WIDTH:250px; HEIGHT:250px" SRC="rugby.jpeg">
-            <button class="buttonload">
-  <i class="fa fa-spinner fa-spin"></i>Loading
-</button>
+                <button class="buttonload">load me</button>
+  
 
     
         <form>
             <p>Gamer Knowledge:<br>
             <textarea id="twit" type="text" button id = "mybutton" name="thetweet" cols="100" rows="4"></textarea>
         </form> 
-        <button type="button" button id = "mybutton" onclick="tweet()">Submit</button>
+        <button id="mybutton" onclick="tweet()">Submit</button>
     
         <br><input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" />
         <div id="imgTest" style="display:none;"></div>
         
-    <div id="mytweets"></div>
-    <div id="mydata"></div>
-    <div id="myphoto"></div>
-            <div id="mydiv"></div>
-    </div>   
-    </body>
-<style>
-    
+        <div id="mytweets"></div>
+        <div id="mydata"></div>
+        <div id="myphoto"></div>
+        <div id="mydiv"></div>
+                <br>
+                <br>
+                <br>
+        <textarea id="changebio"> Type your new bio here</textarea>
+        <button onclick="changebio()"> Submit</button>
+        <div id="bioarea">
+                </div>
+    <!--</div>-->   
+    <script>
+          function changebio() {
+              var newbio = document.getElementById("changebio").value;
+               firebase.database().ref('users/' + userId).update({
+                   bio : newbio,
+               });
+              document.getElementById("bioarea").innerHTML = newbio;
+              
+              
+          }      
+                
+                
+                
+                </script>
+
+                
+                
+    <style>
+        
+        
     img.sticky {
   position: -webkit-sticky;
   position: sticky;
@@ -418,4 +523,4 @@ a {
     
 
     
-            </html>
+</html>
